@@ -7,6 +7,7 @@ from langchain.llms import OpenAI
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 import os
+from langchain.callbacks import get_openai_callback
 
 def main():
     load_dotenv()
@@ -40,7 +41,9 @@ def main():
         llm = OpenAI()
         chain = load_qa_chain(llm, chain_type="stuff")
 
-        response = chain.run(input_documents=docs, question=user_question)
+        with get_openai_callback() as cb:
+          response = chain.run(input_documents=docs, question=user_question)
+          print(cb)
 
         st.write(response)
 
