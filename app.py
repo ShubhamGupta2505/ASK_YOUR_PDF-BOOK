@@ -19,7 +19,7 @@ def main():
       text = ""
       for page in pdf_reader.pages:
         text += page.extract_text()
-      st.write(text)
+    #   st.write(text)
 
       text_splitter = CharacterTextSplitter(
         separator="\n",
@@ -28,8 +28,24 @@ def main():
         length_function=len
       )
 
-      chunk = text_splitter(pdf)
-      st.write(chunk)
+      chunk = text_splitter.split_text(text)
+
+      embeddings = OpenAIEmbeddings()
+      knowledge_base = FAISS.from_texts(chunk,embeddings)
+
+      user_question = st.text_input("Ask a Question about your PDF")
+      if user_question:
+        docs = knowledge_base.similarity_search(user_question)
+        
+        llm = OpenAI()
+        chain = load_qa_chain(llm, chain_type="stuff")
+
+        response = chain.run(input_documents=docs, question=user_question)
+
+        st.write(response)
+
+    
+    #   st.write(chunk)
 
 
 
