@@ -15,7 +15,8 @@ def main():
     user_question = st.text_input("Ask a Question ")
     llm = OpenAI(model_name='text-davinci-003', 
              temperature=0.9, 
-             max_tokens = 256)
+             max_tokens = 256,
+             verbose=True)
     response = llm(user_question)
     submit = st.button("submit")
     if submit:
