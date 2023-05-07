@@ -21,7 +21,7 @@ def main():
       for page in pdf_reader.pages:
         text += page.extract_text()
     #   st.write(text)
-
+# splitting text
       text_splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=1000,
